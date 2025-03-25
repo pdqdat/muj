@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #3b82f6;
+
+    --animate-text: text 5s ease infinite;
+
+    @keyframes text {
+        0%,
+        100% {
+            background-size: 200% 200%;
+            background-position: left center;
+        }
+        50% {
+            background-size: 200% 200%;
+            background-position: right center;
+        }
+    }
+}
+
+@layer base {
+    a {
+        @apply text-purple-600 hover:text-purple-500;
+    }
+}
+
+@layer components {
+    .container {
+        @apply max-w-[77.5rem] mx-auto px-4 md:px-8 lg:px-10 xl:max-w-[87.5rem];
+    }
+
+    .primary-btn {
+        @apply flex items-center justify-center rounded-md bg-purple-600 px-3 py-1.5 font-semibold leading-6 text-white shadow-sm hover:bg-purple-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 disabled:pointer-events-none disabled:opacity-50 transition-colors;
+    }
+
+    .beautiful-btn {
+        @apply animate-text rounded-md bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 px-3.5 py-2 font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600;
+    }
+}

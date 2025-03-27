@@ -7,36 +7,50 @@ import BgClipPath from "./bg-clip-path";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <div className="bg-white h-screen flex justify-center items-start md:items-center">
-            <div className="relative isolate px-6 pt-14">
-                <div className="text-center space-y-4">
+        <div className="flex h-screen justify-center bg-white">
+            <div className="relative isolate px-4">
+                <div className="pt-32 text-center sm:pt-48 lg:pt-56">
                     <h1
                         className={
-                            "text-4xl md:text-6xl h-[5.5rem] font-semibold" +
-                            " bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent animate-text"
+                            "h-[5.5rem] text-4xl font-semibold md:text-6xl" +
+                            " animate-text bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent"
                         }
                     >
-                        Thống kê số lượng thuốc
+                        Thống kê <br className="block sm:hidden" />
+                        số lượng thuốc
                     </h1>
-                    <div className="mx-auto px-0 md:px-30">
+                    <div className="flex justify-center">
+                        <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                            <a
+                                href="https://github.com/pdqdat/muj/blob/master/data-processing.ipynb"
+                                target="_blank"
+                                className="font-semibold"
+                            >
+                                <span
+                                    aria-hidden="true"
+                                    className="absolute inset-0"
+                                />
+                                Script thống kê số liệu{" "}
+                                <span aria-hidden="true">&rarr;</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div className="mx-auto mt-8 px-0 md:px-28">
                         <Dropzone />
                     </div>
-                    <a
-                        href="https://github.com/pdqdat/muj/blob/master/data-processing.ipynb"
-                        target="_blank"
-                        className="beautiful-btn font-medium"
-                    >
-                        Script thống kê số liệu
-                    </a>
                 </div>
                 <BgClipPath />
             </div>
-            <footer className="fixed bottom-0 w-full text-center text-sm md:text-base">
+            <footer className="fixed bottom-0 w-full text-center text-sm text-gray-600 backdrop-blur-md">
                 Một sản phẩm của{" "}
-                <a href="https://datphan.me" target="_blank">
+                <a
+                    href="https://datphan.me"
+                    target="_blank"
+                    className="font-medium"
+                >
                     datphan.me
                 </a>
             </footer>
         </div>
-    </StrictMode>
+    </StrictMode>,
 );

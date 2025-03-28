@@ -24,7 +24,7 @@ createRoot(document.getElementById("root")).render(
                             <a
                                 href="https://github.com/pdqdat/muj/blob/master/data-processing.ipynb"
                                 target="_blank"
-                                className="font-semibold"
+                                className="font-semibold text-gray-600"
                             >
                                 <span
                                     aria-hidden="true"

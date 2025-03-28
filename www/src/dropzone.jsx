@@ -4,19 +4,22 @@ import { useDropzone } from "react-dropzone";
 const Dropzone = () => {
     const [file, setFile] = useState(null);
     const [rejected, setRejected] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [downloadUrl, setDownloadUrl] = useState(null);
 
     const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
         if (acceptedFiles.length > 0) {
             setFile(acceptedFiles[0]);
             setRejected(null);
+            setError(null);
+            setDownloadUrl(null);
         }
 
         if (rejectedFiles.length > 0) {
             setRejected(rejectedFiles[0]);
             setFile(null);
         }
-
-        console.log(rejectedFiles);
     }, []);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -26,11 +29,13 @@ const Dropzone = () => {
                 [],
             "application/vnd.ms-excel": [],
         },
+        // Max size: 5MB
         maxSize: 1024 * 1024 * 5,
     });
 
     const removeFile = () => {
         setFile(null);
+        setDownloadUrl(null);
     };
 
     const handleSubmit = async (e) => {
@@ -40,10 +45,39 @@ const Dropzone = () => {
             return;
         }
 
+        setLoading(true);
+        setError(null);
+
         const formData = new FormData();
         formData.append("file", file);
 
-        console.log(formData.get("file"));
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_API_URL}/api/files/`,
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        Accept: "application/json",
+                    },
+                },
+            );
+
+            if (!response.ok) {
+                setError("Tải lên file thất bại");
+                console.error("File upload failed:", response.statusText);
+                throw new Error("File upload failed");
+            }
+
+            const data = await response.json();
+            console.log(data);
+            setDownloadUrl(data.download_url);
+        } catch (err) {
+            console.error(err);
+            setError("Đã xảy ra lỗi khi tải lên file");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -103,7 +137,7 @@ const Dropzone = () => {
                         type="submit"
                         className="beautiful-btn cursor-pointer"
                     >
-                        Nhấn vào đây để xử lý file
+                        Thống kê file {file.name}
                     </button>
                 </div>
             )}
@@ -132,6 +166,23 @@ const Dropzone = () => {
                             </>
                         )}
                     </p>
+                </div>
+            )}
+            {loading && <div>Loading...</div>}
+            {error && (
+                <div className="flex items-center justify-center">
+                    <p className="max-w-96 text-red-500">{error}</p>
+                </div>
+            )}
+            {downloadUrl && (
+                <div className="flex items-center justify-center">
+                    <a
+                        href={downloadUrl}
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
+                    >
+                        Tải file đã xử lý
+                    </a>
                 </div>
             )}
         </form>

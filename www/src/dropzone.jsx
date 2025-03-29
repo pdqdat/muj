@@ -5,7 +5,6 @@ import Button from "./button";
 
 const Dropzone = () => {
     const [file, setFile] = useState(null);
-    const [rejected, setRejected] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [downloadUrl, setDownloadUrl] = useState(null);
@@ -13,14 +12,39 @@ const Dropzone = () => {
     const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
         if (acceptedFiles.length > 0) {
             setFile(acceptedFiles[0]);
-            setRejected(null);
             setError(null);
             setDownloadUrl(null);
         }
 
         if (rejectedFiles.length > 0) {
-            setRejected(rejectedFiles[0]);
             setFile(null);
+            setError(
+                <>
+                    File{" "}
+                    <span className="font-medium">
+                        {rejectedFiles[0].file.name}
+                    </span>{" "}
+                    {rejectedFiles[0].errors.some(
+                        (error) => error.code === "file-too-large",
+                    ) && (
+                        <>
+                            bự quá, tới{" "}
+                            {Math.round(
+                                rejectedFiles[0].file.size / 1024 / 1024,
+                            )}
+                            MB lận! Tối đa 5MB thôi nhé.
+                        </>
+                    )}
+                    {rejectedFiles[0].errors.some(
+                        (error) => error.code === "file-invalid-type",
+                    ) && (
+                        <>
+                            không đúng định dạng. Ở đây chỉ chấp nhận file Excel
+                            (.xlsx, .xls) thôi nhé!
+                        </>
+                    )}
+                </>,
+            );
         }
     }, []);
 
@@ -37,6 +61,7 @@ const Dropzone = () => {
 
     const removeFile = () => {
         setFile(null);
+        setError(null);
         setDownloadUrl(null);
     };
 
@@ -76,7 +101,7 @@ const Dropzone = () => {
             setDownloadUrl(data.download_url);
         } catch (err) {
             console.error(err);
-            setError("Đã xảy ra lỗi khi tải lên file");
+            setError("Đã xảy ra lỗi khi xử lý file. Vui lòng thử lại.");
         } finally {
             setLoading(false);
         }
@@ -141,33 +166,6 @@ const Dropzone = () => {
                     </p>
                 </div>
             )}
-            {rejected && (
-                <div className="flex items-center justify-center">
-                    <p className="max-w-96 text-red-500">
-                        File{" "}
-                        <span className="font-medium">
-                            {rejected.file.name}
-                        </span>{" "}
-                        {rejected.errors.some(
-                            (error) => error.code === "file-too-large",
-                        ) && (
-                            <>
-                                bự quá, tới{" "}
-                                {Math.round(rejected.file.size / 1024 / 1024)}MB
-                                lận! Tối đa 5MB thôi nhé.
-                            </>
-                        )}
-                        {rejected.errors.some(
-                            (error) => error.code === "file-invalid-type",
-                        ) && (
-                            <>
-                                không đúng định dạng. Ở đây chỉ chấp nhận file
-                                Excel (.xlsx, .xls) thôi nhé!
-                            </>
-                        )}
-                    </p>
-                </div>
-            )}
             {loading && <div>Chờ chút nhé...</div>}
             {error && (
                 <div className="flex items-center justify-center">
@@ -175,10 +173,11 @@ const Dropzone = () => {
                 </div>
             )}
             {downloadUrl && (
-                <div className="flex items-center justify-center">
+                <div className="flex flex-col items-center justify-center space-y-2">
+                    <p>File đã được xử lý thành công!</p>
                     <a href={downloadUrl} rel="noopener noreferrer">
                         <Button variant="beautiful" type="button">
-                            Tải file đã xử lý ở đây nè
+                            Tải về ngay nào
                         </Button>
                     </a>
                 </div>

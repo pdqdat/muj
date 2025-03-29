@@ -20,3 +20,6 @@ Thumbs.db
 # Database files
 *.sqlite3
 *.db
+
+# Uploaded Excel files
+data_processing/media/uploads/

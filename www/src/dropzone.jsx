@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
+import Button from "./button";
+
 const Dropzone = () => {
     const [file, setFile] = useState(null);
     const [rejected, setRejected] = useState(null);
@@ -82,63 +84,61 @@ const Dropzone = () => {
 
     return (
         <form className="space-y-4" onSubmit={handleSubmit}>
-            <div
-                {...getRootProps({
-                    className:
-                        "flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/10 bg-transparent transition-colors hover:border-purple-600",
-                })}
-            >
-                <input {...getInputProps()} />
-                <svg
-                    className="mb-2 h-8 w-8 animate-bounce text-gray-500"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 16"
-                >
-                    <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.5"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                    />
-                </svg>
-                <p className="text-sm font-medium text-gray-600 md:text-base">
-                    {isDragActive ? (
-                        "Thả file vào đây nè..."
-                    ) : (
-                        <>
-                            Kéo và thả file vào đây,{" "}
-                            <br className="block sm:hidden" />
-                            hoặc nhấn để tải file lên
-                        </>
-                    )}
-                </p>
-                <p className="mt-2 text-xs text-gray-500 md:text-sm">
-                    Tối đa 5MB
-                </p>
-            </div>
-            {file && (
-                <div>
-                    <p className="font-medium text-gray-600">File đã chọn</p>
-                    <div className="flex items-center justify-center space-x-2">
-                        <p className="max-w-96 truncate text-gray-500">
-                            {file.name}
-                        </p>
-                        <button
-                            className="cursor-pointer font-semibold text-gray-600 hover:text-purple-500"
-                            onClick={removeFile}
-                        >
-                            &#x2715;
-                        </button>
-                    </div>
-                    <button
+            {file ? (
+                <div className="flex w-full items-center space-x-2">
+                    <Button
+                        variant="primary"
                         type="submit"
-                        className="beautiful-btn cursor-pointer"
+                        className="flex-1"
+                        disabled={loading}
                     >
-                        Thống kê file {file.name}
-                    </button>
+                        Xử lý file {file.name}
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={removeFile}
+                        disabled={loading}
+                    >
+                        Hủy bỏ
+                    </Button>
+                </div>
+            ) : (
+                <div
+                    {...getRootProps({
+                        className:
+                            "flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/10 bg-transparent transition-colors hover:border-purple-600",
+                    })}
+                >
+                    <input {...getInputProps()} />
+                    <svg
+                        className="mb-2 h-8 w-8 animate-bounce text-gray-500"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                    </svg>
+                    <p className="text-sm font-medium text-gray-600 md:text-base">
+                        {isDragActive ? (
+                            "Thả file vào đây nè..."
+                        ) : (
+                            <>
+                                Kéo và thả file vào đây,{" "}
+                                <br className="block sm:hidden" />
+                                hoặc nhấn để tải file lên
+                            </>
+                        )}
+                    </p>
+                    <p className="mt-2 text-xs text-gray-500 md:text-sm">
+                        Tối đa 5MB
+                    </p>
                 </div>
             )}
             {rejected && (
@@ -168,7 +168,7 @@ const Dropzone = () => {
                     </p>
                 </div>
             )}
-            {loading && <div>Loading...</div>}
+            {loading && <div>Chờ chút nhé...</div>}
             {error && (
                 <div className="flex items-center justify-center">
                     <p className="max-w-96 text-red-500">{error}</p>
@@ -176,12 +176,10 @@ const Dropzone = () => {
             )}
             {downloadUrl && (
                 <div className="flex items-center justify-center">
-                    <a
-                        href={downloadUrl}
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
-                    >
-                        Tải file đã xử lý
+                    <a href={downloadUrl} rel="noopener noreferrer">
+                        <Button variant="beautiful" type="button">
+                            Tải file đã xử lý ở đây nè
+                        </Button>
                     </a>
                 </div>
             )}

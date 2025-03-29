@@ -15,7 +15,6 @@ python -m venv venv
 2. Activate the virtual environment
 
 ```console
-# Windows
 .\venv\Scripts\activate
 ```
 
@@ -31,20 +30,26 @@ pip install -r .\requirements.txt
 django-admin startproject data_processing
 ```
 
-5. Create a Django app named `core`
+5. Move into the `data_processing` directory
+
+```console
+cd .\data_processing
+```
+
+6. Create a Django app named `core`
 
 ```console
 django-admin startapp core
 ```
 
-6. Make database migrations
+7. Make database migrations
 
 ```console
 python .\manage.py makemigrations
 python .\manage.py migrate
 ```
 
-7. Run the Django server
+8. Run the Django server
 
 ```console
 python .\manage.py runserver

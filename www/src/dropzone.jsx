@@ -8,6 +8,7 @@ const Dropzone = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [downloadUrl, setDownloadUrl] = useState(null);
+    const [count, setCount] = useState(null);
 
     const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
         if (acceptedFiles.length > 0) {
@@ -97,7 +98,6 @@ const Dropzone = () => {
             }
 
             const data = await response.json();
-            console.log(data);
             setDownloadUrl(data.download_url);
         } catch (err) {
             console.error(err);
@@ -108,73 +108,88 @@ const Dropzone = () => {
     };
 
     return (
-        <form className="space-y-4" onSubmit={handleSubmit}>
-            {file ? (
+        <form className="max-w-96 space-y-4" onSubmit={handleSubmit}>
+            <h1>{count}</h1>
+            <div
+                className={`border-border w-full rounded-lg border border-dashed bg-transparent transition-colors ${!file && "hover:border-primary"}`}
+            >
+                {file ? (
+                    <p className="px-4 py-16">
+                        File đã chọn:{" "}
+                        <span className="text-primary font-medium">
+                            {file.name}
+                        </span>
+                    </p>
+                ) : (
+                    <div
+                        {...getRootProps({
+                            className:
+                                "h-64 w-full cursor-pointer flex flex-col items-center justify-center",
+                        })}
+                    >
+                        <input {...getInputProps()} />
+                        <svg
+                            className="text-text-secondary mb-2 h-8 w-8 animate-bounce"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 20 16"
+                        >
+                            <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="1.5"
+                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                            />
+                        </svg>
+                        <p className="text-text-secondary text-sm md:text-base">
+                            {isDragActive ? (
+                                "Thả file vào đây nè..."
+                            ) : (
+                                <>
+                                    <span className="font-medium">
+                                        Kéo và thả file vào đây,
+                                    </span>{" "}
+                                    <br className="block sm:hidden" />
+                                    hoặc nhấn để tải file lên
+                                </>
+                            )}
+                        </p>
+                        <p className="text-text-tertiary mt-2 text-xs md:text-sm">
+                            Tối đa 5MB
+                        </p>
+                    </div>
+                )}
+            </div>
+            {file && (
                 <div className="flex w-full items-center space-x-2">
+                    <Button
+                        variant="outline"
+                        onClick={removeFile}
+                        disabled={loading || downloadUrl}
+                    >
+                        Hủy bỏ
+                    </Button>
                     <Button
                         variant="primary"
                         type="submit"
                         className="flex-1"
-                        disabled={loading}
+                        disabled={loading || downloadUrl}
                     >
-                        Xử lý file {file.name}
+                        Xử lý file này
                     </Button>
-                    <Button
-                        variant="outline"
-                        onClick={removeFile}
-                        disabled={loading}
-                    >
-                        Hủy bỏ
-                    </Button>
-                </div>
-            ) : (
-                <div
-                    {...getRootProps({
-                        className:
-                            "flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/10 bg-transparent transition-colors hover:border-purple-600",
-                    })}
-                >
-                    <input {...getInputProps()} />
-                    <svg
-                        className="mb-2 h-8 w-8 animate-bounce text-gray-500"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 16"
-                    >
-                        <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="1.5"
-                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                        />
-                    </svg>
-                    <p className="text-sm font-medium text-gray-600 md:text-base">
-                        {isDragActive ? (
-                            "Thả file vào đây nè..."
-                        ) : (
-                            <>
-                                Kéo và thả file vào đây,{" "}
-                                <br className="block sm:hidden" />
-                                hoặc nhấn để tải file lên
-                            </>
-                        )}
-                    </p>
-                    <p className="mt-2 text-xs text-gray-500 md:text-sm">
-                        Tối đa 5MB
-                    </p>
                 </div>
             )}
             {loading && <div>Chờ chút nhé...</div>}
             {error && (
                 <div className="flex items-center justify-center">
-                    <p className="max-w-96 text-red-500">{error}</p>
+                    <p className="text-error max-w-96">{error}</p>
                 </div>
             )}
             {downloadUrl && (
-                <div className="flex flex-col items-center justify-center space-y-2">
-                    <p>File đã được xử lý thành công!</p>
+                <div className="border-primary flex flex-col items-center justify-center space-y-4 rounded-lg border border-dashed p-4">
+                    <p>File đã được xử lý thành công &#127881;</p>
                     <a href={downloadUrl} rel="noopener noreferrer">
                         <Button variant="beautiful" type="button">
                             Tải về ngay nào

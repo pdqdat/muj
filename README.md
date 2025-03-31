@@ -1,8 +1,9 @@
 # Medicine data processing project
 
-## Tech stack
+## Technologies
 
--   React
+-   React 19
+-   Tailwind v4
 -   Django
 -   Pandas
 -   SQLite

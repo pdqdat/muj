@@ -9,7 +9,7 @@ createRoot(document.getElementById("root")).render(
     <StrictMode>
         <div className="flex h-screen justify-center bg-white">
             <div className="relative isolate px-4">
-                <div className="pt-32 text-center sm:pt-48 lg:pt-56">
+                <div className="pt-32 text-center lg:pt-48">
                     <h1
                         className={
                             "h-[5.5rem] text-4xl font-semibold md:text-6xl" +
@@ -20,17 +20,17 @@ createRoot(document.getElementById("root")).render(
                         số lượng thuốc
                     </h1>
                     <div className="flex justify-center">
-                        <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                        <div className="text-text-secondary ring-border hover:ring-border-hover relative rounded-full px-3 py-1 text-sm/6 ring-1 transition-colors">
                             <a
-                                href="https://github.com/pdqdat/muj/blob/master/data-processing.ipynb"
+                                href="https://github.com/pdqdat/muj/blob/master/xu-ly-du-lieu.ipynb"
                                 target="_blank"
-                                className="font-semibold text-gray-600"
+                                className="text-text-secondary font-semibold"
                             >
                                 <span
                                     aria-hidden="true"
                                     className="absolute inset-0"
                                 />
-                                Script thống kê số liệu{" "}
+                                Script xử lý số liệu{" "}
                                 <span aria-hidden="true">&rarr;</span>
                             </a>
                         </div>
@@ -41,12 +41,12 @@ createRoot(document.getElementById("root")).render(
                 </div>
                 <BgClipPath />
             </div>
-            <footer className="fixed bottom-0 w-full text-center text-sm text-gray-600 backdrop-blur-md">
+            <footer className="text-text-secondary fixed bottom-0 w-full text-center text-sm backdrop-blur-md">
                 Một sản phẩm của{" "}
                 <a
                     href="https://datphan.me"
                     target="_blank"
-                    className="font-medium"
+                    className="text-primary hover:text-primary-hover font-medium"
                 >
                     datphan.me
                 </a>

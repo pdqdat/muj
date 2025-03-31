@@ -45,9 +45,13 @@ class FilesViewSet(viewsets.ModelViewSet):
         medicine_dict = {}
 
         def parse_medicine(medicine_str):
+            # Use regular expression to extract the medicine name and its quantity
+            # E.g.: 'SPORAL  100mg SL: 1 SN: 7' -> name: 'SPORAL  100mg', quantity: '1'
             match = re.match(r'(.+?) SL: (\d+)', medicine_str)
             return match.groups() if match else (None, None)
 
+        # Iterate through each row in the DataFrame
+        # to process the medicine names and quantities for each doctor
         for _, row in df.iterrows():
             doctor_name = row.iloc[-1]
             medicines = row.iloc[0].split(';')
@@ -61,8 +65,10 @@ class FilesViewSet(viewsets.ModelViewSet):
 
         # Create a DataFrame for results
         result_df = pd.DataFrame.from_dict(medicine_dict, orient='index', columns=doctor_names)
-        result_df['>>> Total <<<'] = result_df.sum(axis=1)
+
+        # Add a new column 'TỔNG' that contains the sum of all quantities in each row
+        result_df['>>> TỔNG <<<'] = result_df.sum(axis=1)
 
         # Save the processed data to a new sheet in the same file
         with pd.ExcelWriter(file_path, mode='a', engine='openpyxl', if_sheet_exists='replace') as writer:
-            result_df.to_excel(writer, sheet_name='Result', startrow=0)
+            result_df.to_excel(writer, sheet_name='Kết quả', startrow=0)

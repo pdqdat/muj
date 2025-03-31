@@ -108,13 +108,13 @@ const Dropzone = () => {
     };
 
     return (
-        <form className="max-w-96 space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
             <h1>{count}</h1>
             <div
                 className={`border-border w-full rounded-lg border border-dashed bg-transparent transition-colors ${!file && "hover:border-primary"}`}
             >
                 {file ? (
-                    <p className="px-4 py-16">
+                    <p className="mx-auto max-w-96 px-4 py-16">
                         File đã chọn:{" "}
                         <span className="text-primary font-medium">
                             {file.name}
